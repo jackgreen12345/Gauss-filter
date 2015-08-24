@@ -1,0 +1,52 @@
+public double gaussfilter(int[] rssi/*目标域*/) {
+		// TODO Auto-generated method stub
+			int i,j,k=0;
+			
+			int rssi1[]=new int[100];
+			int length=rssi.length;
+			double average=0;//均值
+			double standarddeviation=0;//标准差
+			//求均值
+			for(i=0;i<rssi.length;i++) 
+				if (rssi[i]!=0) average=average+rssi[i];
+				else {
+					length=i;
+					System.out.println("rssi的length: "+length);
+					break;
+				}
+			
+			average=average/length;
+			System.out.println(name+"均值: "+average);
+
+			//求标准差
+			for (i=0;i<length;i++) 	standarddeviation=standarddeviation+(rssi[i]-average)*(rssi[i]-average);
+			standarddeviation=standarddeviation/(length-1);
+			standarddeviation=Math.sqrt(standarddeviation);
+			System.out.println(name+"标准差: "+standarddeviation);
+			//高斯滤波去除异常值
+			
+			double min = average-standarddeviation;
+			double max = average+standarddeviation;
+			
+			for (i=0;i<rssi.length;i++) 
+				if ((rssi[i]>=min)&&(rssi[i]<=max))
+					{
+						rssi1[k]=rssi[i];
+						k++;
+					}
+			
+			int length1=0;
+			double total=0;
+			for (i=0;i<rssi1.length;i++) 
+				if (rssi1[i]!=0){
+					total=total+rssi1[i];
+					System.out.print(rssi1[i]+" C ");
+					length1++;
+				}
+				else break;
+			System.out.println(" Name: "+name);
+			double res=total/length1;
+
+			System.out.println("name: "+name+"平均信号强度"+res);
+			return res;
+	}
